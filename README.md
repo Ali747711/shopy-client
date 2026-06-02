@@ -2,7 +2,7 @@
 
 AI-powered e-commerce frontend. Describe what you want in plain English, and Shopy finds it.
 
-![Shopy Homepage](./public/homepage.png)
+![https://shopy-seoul.vercel.app/][Shopy Homepage](./public/homepage.png)
 
 ---
 
@@ -59,12 +59,12 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start development server |
+| `npm run build` | Production build         |
+| `npm run start` | Start production server  |
+| `npm run lint`  | Run ESLint               |
 
 ## Project Structure
 
