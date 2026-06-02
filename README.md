@@ -2,7 +2,8 @@
 
 AI-powered e-commerce frontend. Describe what you want in plain English, and Shopy finds it.
 
-![Shopy Homepage](./public/homepage.png)(https://shopy-seoul.vercel.app/)
+![Shopy Homepage](./public/homepage.png)
+Open (https://shopy-seoul.vercel.app/)
 
 ---
 
