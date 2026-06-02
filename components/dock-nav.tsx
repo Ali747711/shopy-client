@@ -78,7 +78,7 @@ export function DockNav() {
   return (
     <nav
       aria-label="Primary"
-      className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center px-4"
+      className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4"
     >
       <div className="pointer-events-auto flex scale-90 items-center gap-3 rounded-[28px] bg-neutral-900/80 px-3 py-2 shadow-2xl ring-1 ring-white/10 backdrop-blur-lg sm:scale-100 sm:gap-4 sm:rounded-[40px] sm:px-5 sm:py-3">
         {PRIMARY_ITEMS.map(renderItem)}

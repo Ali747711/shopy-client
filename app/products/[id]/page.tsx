@@ -51,7 +51,7 @@ export default async function ProductDetailPage({
 
   if (errorMessage) {
     return (
-      <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-12">
+      <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
         <BackLink />
         <div className="mt-6 flex flex-col items-center justify-center gap-3 border border-dashed border-border py-20 text-center">
           <HugeiconsIcon icon={Alert01Icon} strokeWidth={1.5} className="size-8 text-muted-foreground" />
@@ -73,7 +73,7 @@ export default async function ProductDetailPage({
   const attributes = Object.entries(product.productAttributes ?? {})
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-12">
+    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
       <BackLink />
 
       <div className="mt-6 grid gap-8 md:grid-cols-2">

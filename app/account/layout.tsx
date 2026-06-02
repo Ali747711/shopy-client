@@ -26,7 +26,7 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
   }
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:py-12">
+    <main className="mx-auto w-full max-w-6xl px-4 pt-24 pb-8 sm:pb-12">
       <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
         <AccountSidebar />
         <div className="min-w-0">{children}</div>

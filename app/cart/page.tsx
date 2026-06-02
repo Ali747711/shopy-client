@@ -27,7 +27,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-12">
+    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
       <div className="mb-6 flex items-end justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">Your cart</h1>
         {hydrated && items.length > 0 && (

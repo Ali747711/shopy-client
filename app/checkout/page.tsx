@@ -89,7 +89,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-12">
+    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
       <h1 className="font-heading mb-6 text-2xl font-semibold tracking-tight">Checkout</h1>
 
       <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
