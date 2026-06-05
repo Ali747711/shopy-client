@@ -15,7 +15,7 @@ export default function CartPage() {
 
   if (hydrated && items.length === 0) {
     return (
-      <main className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4 py-24 text-center">
+      <main className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4 py-24 pb-24 text-center">
         <HugeiconsIcon icon={ShoppingCart01Icon} strokeWidth={1.5} className="size-10 text-muted-foreground" />
         <h1 className="font-heading mt-4 text-xl font-semibold">Your cart is empty</h1>
         <p className="mt-1 text-xs text-muted-foreground">Add a few things and they&apos;ll show up here.</p>
@@ -27,7 +27,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
+    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-24 sm:pb-12">
       <div className="mb-6 flex items-end justify-between">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">Your cart</h1>
         {hydrated && items.length > 0 && (

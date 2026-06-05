@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: 'Payment cancelled — Shopy' }
 
 export default function CheckoutCancelPage() {
   return (
-    <main className="mx-auto flex w-full max-w-lg flex-col items-center px-4 py-24 text-center">
+    <main className="mx-auto flex w-full max-w-lg flex-col items-center px-4 py-24 pb-24 text-center">
       <HugeiconsIcon icon={Cancel01Icon} strokeWidth={1.5} className="size-10 text-muted-foreground" />
       <h1 className="font-heading mt-4 text-xl font-semibold">Payment cancelled</h1>
       <p className="mt-1 text-xs text-muted-foreground">

@@ -62,7 +62,7 @@ export function AiSearchView() {
   }, [query])
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
+    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-24 sm:pb-12">
       <div className="mb-6 inline-flex items-center gap-2 text-[10px] tracking-wider text-muted-foreground uppercase">
         <HugeiconsIcon icon={AiSearch02Icon} strokeWidth={2} className="size-3.5 text-primary" />
         AI search

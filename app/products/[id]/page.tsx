@@ -6,6 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { Alert01Icon, ArrowLeft01Icon, Image01Icon, StarIcon } from '@hugeicons/core-free-icons'
 
 import { AddToCart } from '@/components/products/add-to-cart'
+import { ProductReviews } from '@/components/reviews/product-reviews'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { isApiError } from '@/lib/api'
@@ -51,7 +52,7 @@ export default async function ProductDetailPage({
 
   if (errorMessage) {
     return (
-      <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
+      <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-24 sm:pb-12">
         <BackLink />
         <div className="mt-6 flex flex-col items-center justify-center gap-3 border border-dashed border-border py-20 text-center">
           <HugeiconsIcon icon={Alert01Icon} strokeWidth={1.5} className="size-8 text-muted-foreground" />
@@ -160,6 +161,15 @@ export default async function ProductDetailPage({
           </div>
         </div>
       </div>
+
+      {/* Reviews */}
+      <Separator className="my-10" />
+      <section aria-labelledby="reviews-heading">
+        <h2 id="reviews-heading" className="font-heading mb-6 text-xl font-semibold tracking-tight">
+          Reviews
+        </h2>
+        <ProductReviews productId={product._id} />
+      </section>
     </main>
   )
 }

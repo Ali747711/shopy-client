@@ -62,7 +62,7 @@ export function CheckoutSuccess() {
       : `Pay ${formatPrice(order.orderTotal, order.orderCurrency)} on delivery.`
 
   return (
-    <main className="mx-auto w-full max-w-lg px-4 py-16 sm:py-24">
+    <main className="mx-auto w-full max-w-lg px-4 py-16 pb-24 sm:py-24 sm:pb-24">
       <div className="flex flex-col items-center text-center">
         <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={1.5} className="size-12 text-primary" />
         <h1 className="font-heading mt-4 text-2xl font-semibold tracking-tight">Order placed</h1>
@@ -110,7 +110,7 @@ export function CheckoutSuccess() {
 
 function Centered({ title, body, error }: { title: string; body: string; error?: boolean }) {
   return (
-    <main className="mx-auto flex w-full max-w-lg flex-col items-center px-4 py-24 text-center">
+    <main className="mx-auto flex w-full max-w-lg flex-col items-center px-4 py-24 pb-24 text-center">
       {error && <HugeiconsIcon icon={Alert01Icon} strokeWidth={1.5} className="size-9 text-muted-foreground" />}
       <h1 className="font-heading mt-4 text-xl font-semibold">{title}</h1>
       <p className="mt-1 text-xs text-muted-foreground">{body}</p>

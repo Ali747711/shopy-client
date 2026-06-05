@@ -83,7 +83,7 @@ export default async function ProductsPage({
   }
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 pt-24 pb-8 sm:pb-12">
+    <main className="mx-auto w-full max-w-6xl px-4 pt-24 pb-24 sm:pb-12">
       <header className="mb-6">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">Products</h1>
         <p className="mt-1 text-xs text-muted-foreground">

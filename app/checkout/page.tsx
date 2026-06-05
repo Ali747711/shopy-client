@@ -44,12 +44,12 @@ export default function CheckoutPage() {
   }, [])
 
   if (status === 'loading' || !hydrated) {
-    return <main className="mx-auto w-full max-w-5xl px-4 py-24 text-center text-xs text-muted-foreground">Loading…</main>
+    return <main className="mx-auto w-full max-w-5xl px-4 py-24 pb-24 text-center text-xs text-muted-foreground">Loading…</main>
   }
 
   if (items.length === 0) {
     return (
-      <main className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-24 text-center">
+      <main className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 py-24 pb-24 text-center">
         <h1 className="font-heading text-xl font-semibold">Your cart is empty</h1>
         <p className="mt-1 text-xs text-muted-foreground">Add something before checking out.</p>
         <Link href="/products" className={cn(buttonVariants({ variant: 'default' }), 'mt-6')}>
@@ -89,7 +89,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-8 sm:pb-12">
+    <main className="mx-auto w-full max-w-5xl px-4 pt-24 pb-24 sm:pb-12">
       <h1 className="font-heading mb-6 text-2xl font-semibold tracking-tight">Checkout</h1>
 
       <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
