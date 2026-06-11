@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -37,6 +38,7 @@ interface Suggestion {
   category: string;
   price: number;
   currency: string;
+  imageUrl?: string;
 }
 
 interface Message {
@@ -129,6 +131,7 @@ export function ShoppingAssistant({
                 category: p.productCategory,
                 price: p.productPrice,
                 currency: p.productCurrency,
+                imageUrl: p.productImages?.[0]?.url,
               }));
             patch({ suggestions, seeAllQuery: query });
           },
@@ -229,7 +232,7 @@ export function ShoppingAssistant({
           />
 
           <motion.div
-            className="glass relative flex w-full flex-col overflow-hidden border-border bg-background/95 shadow-2xl sm:max-w-xl sm:rounded-none"
+            className="glass relative flex h-full w-full flex-col overflow-hidden border-border bg-background/95 shadow-2xl sm:h-auto sm:max-h-[85vh] sm:max-w-xl sm:rounded-none"
             initial={{ y: 40, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 24, opacity: 0, scale: 0.98 }}
@@ -266,7 +269,7 @@ export function ShoppingAssistant({
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="flex-1 space-y-4 overflow-y-auto px-4 py-5 sm:h-[72vh]"
+              className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-5"
             >
               {messages.map((message) => (
                 <MessageRow
@@ -369,7 +372,7 @@ function MessageRow({
             >
               <span className="relative size-12 shrink-0 overflow-hidden bg-muted">
                 <Image
-                  src={imageFor(product.category, product.name)}
+                  src={product.imageUrl ?? imageFor(product.category, product.name)}
                   alt={product.name}
                   fill
                   sizes="48px"
@@ -377,10 +380,10 @@ function MessageRow({
                 />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="line-clamp-1 text-xs font-medium text-foreground group-hover:text-primary">
+                <span className="line-clamp-1 text-sm font-medium text-foreground group-hover:text-primary">
                   {product.name}
                 </span>
-                <span className="font-heading mt-0.5 block text-xs font-semibold tabular-nums">
+                <span className="font-heading mt-0.5 block text-sm font-semibold tabular-nums">
                   {formatPrice(product.price, product.currency)}
                 </span>
               </span>
@@ -395,7 +398,7 @@ function MessageRow({
         <button
           type="button"
           onClick={() => onSeeAll(message.seeAllQuery as string)}
-          className="inline-flex items-center gap-1 border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:border-primary/60 hover:text-primary"
+          className="inline-flex items-center gap-1 border border-border px-3 py-1.5 text-sm font-medium transition-colors hover:border-primary/60 hover:text-primary"
         >
           See all results
           <ArrowUpRight className="size-3.5" />
@@ -410,7 +413,7 @@ function MessageRow({
               key={reply}
               type="button"
               onClick={() => onQuickReply(reply)}
-              className="border border-border bg-background px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground"
+              className="border border-border bg-background px-2.5 py-1 text-sm text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground"
             >
               {reply}
             </button>

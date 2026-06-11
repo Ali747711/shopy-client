@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -93,6 +94,14 @@ export function LoginForm() {
           className="h-10"
           required
         />
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
+          >
+            Forgot password?
+          </Link>
+        </div>
       </div>
 
       <Button type="submit" size="lg" disabled={submitting} className="mt-1 w-full">

@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-import { env } from '@/lib/env'
-
 import {
   aiSearchDoneSchema,
   aiSearchMetaSchema,
@@ -34,7 +32,7 @@ export async function streamAiSearch(
 ): Promise<void> {
   let response: Response
   try {
-    response = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}${STREAM_PATH}`, {
+    response = await fetch(STREAM_PATH, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
       body: JSON.stringify({ query }),
@@ -158,7 +156,7 @@ export async function streamAiChat(
 ): Promise<void> {
   let response: Response
   try {
-    response = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}${CHAT_PATH}`, {
+    response = await fetch(CHAT_PATH, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
       body: JSON.stringify({ messages }),

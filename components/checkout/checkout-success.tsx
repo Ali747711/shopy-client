@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Alert01Icon, CheckmarkCircle02Icon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { isApiError } from '@/lib/api'

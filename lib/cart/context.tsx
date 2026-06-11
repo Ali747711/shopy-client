@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 import type { CartAddInput, CartItem } from './types'
 
@@ -68,10 +69,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...product, qty: clampQty(qty, product.stock) }]
     })
+    toast.success('Added to cart', { description: product.productName })
   }, [])
 
   const removeItem = useCallback((productId: string) => {
     setItems((prev) => prev.filter((item) => item.productId !== productId))
+    toast('Removed from cart')
   }, [])
 
   const updateQty = useCallback((productId: string, qty: number) => {

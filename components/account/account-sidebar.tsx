@@ -3,7 +3,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { DashboardSquare01Icon, PackageIcon, Settings02Icon } from '@hugeicons/core-free-icons'
+import { DashboardSquare01Icon, Location01Icon, PackageIcon, Settings02Icon } from '@hugeicons/core-free-icons'
+
+import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
@@ -11,6 +13,7 @@ import { cn } from '@/lib/utils'
 const NAV_ITEMS = [
   { label: 'Overview', href: '/account', icon: DashboardSquare01Icon, exact: true },
   { label: 'Orders', href: '/account/orders', icon: PackageIcon, exact: false },
+  { label: 'Addresses', href: '/account/addresses', icon: Location01Icon, exact: false },
   { label: 'Settings', href: '/account/settings', icon: Settings02Icon, exact: false },
 ]
 

@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { InboxIcon, Alert01Icon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { isApiError } from '@/lib/api'
@@ -118,7 +120,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
         <HugeiconsIcon icon={Alert01Icon} strokeWidth={1.5} className="size-8 text-muted-foreground" />
         <div>
           <p className="font-heading text-sm font-medium">Couldn&apos;t load reviews</p>
-          <p className="mt-1 text-xs text-muted-foreground">{error}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{error}</p>
         </div>
         <Button variant="outline" size="sm" onClick={() => fetchReviews(1, sort, false)}>
           Try again
@@ -181,7 +183,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
           <HugeiconsIcon icon={InboxIcon} strokeWidth={1.5} className="size-8 text-muted-foreground" />
           <div>
             <p className="font-heading text-sm font-medium">No reviews yet</p>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-sm text-muted-foreground">
               Be the first to share your experience.
             </p>
           </div>

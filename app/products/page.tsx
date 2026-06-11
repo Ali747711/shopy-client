@@ -4,11 +4,14 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { Alert01Icon, InboxIcon } from '@hugeicons/core-free-icons'
 
 import { ProductCard } from '@/components/products/product-card'
+import { CurrencySync } from '@/components/products/currency-sync'
 import { ProductFilters } from '@/components/products/product-filters'
 import { ProductsPagination } from '@/components/products/products-pagination'
+import { BlurFade } from '@/components/ui/blur-fade'
 import { isApiError } from '@/lib/api'
 import {
-  getCategories,
+  CATEGORY_KEYS,
+  PRODUCT_CATEGORIES,
   getProducts,
   PRODUCT_SORTS,
   type Product,
@@ -54,17 +57,15 @@ export default async function ProductsPage({
     sort: toSort(first(sp.sort)),
     minPrice: toNum(first(sp.minPrice)),
     maxPrice: toNum(first(sp.maxPrice)),
+    // Pass the currency param so the backend can return converted prices.
+    currency: first(sp.currency),
   }
-
-  // Initiate both requests before awaiting so they run in parallel.
-  const productsPromise = getProducts(filters)
-  const categoriesPromise = getCategories().catch(() => [] as string[])
 
   let products: Product[] = []
   let total = 0
   let errorMessage: string | null = null
   try {
-    const result = await productsPromise
+    const result = await getProducts(filters)
     products = result.data
     total = result.meta?.total ?? 0
   } catch (error) {
@@ -73,7 +74,11 @@ export default async function ProductsPage({
       : 'Something went wrong loading products.'
   }
 
-  const categories = await categoriesPromise
+  // Use the canonical category list — no extra API call needed.
+  const categories = CATEGORY_KEYS.map((key) => ({
+    value: key,
+    label: PRODUCT_CATEGORIES[key].label,
+  }))
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
 
   const linkParams: Record<string, string> = {}
@@ -86,12 +91,18 @@ export default async function ProductsPage({
     <main className="mx-auto w-full max-w-6xl px-4 pt-24 pb-24 sm:pb-12">
       <header className="mb-6">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">Products</h1>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           {errorMessage
             ? 'Browse the catalog'
             : `${total} ${total === 1 ? 'product' : 'products'} available`}
         </p>
       </header>
+
+      {/* CurrencySync appends ?currency=XXX to the URL when the user changes
+          their currency preference, so the server re-fetches with converted prices. */}
+      <Suspense fallback={null}>
+        <CurrencySync />
+      </Suspense>
 
       <div className="mb-6">
         <Suspense fallback={<div className="h-8" />}>
@@ -110,8 +121,10 @@ export default async function ProductsPage({
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+            {products.map((product, index) => (
+              <BlurFade key={product._id} delay={0.03 * index} inView>
+                <ProductCard product={product} />
+              </BlurFade>
             ))}
           </div>
           <div className="mt-8">
@@ -137,7 +150,7 @@ function StateBlock({
       <HugeiconsIcon icon={icon} strokeWidth={1.5} className="size-8 text-muted-foreground" />
       <div>
         <p className="font-heading text-sm font-medium">{title}</p>
-        <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
       </div>
     </div>
   )

@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Delete02Icon, Image01Icon, ShoppingCart01Icon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { QuantityStepper } from '@/components/cart/quantity-stepper'
 import { buttonVariants } from '@/components/ui/button'
 import { useCart } from '@/lib/cart'
@@ -18,7 +20,7 @@ export default function CartPage() {
       <main className="mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4 py-24 pb-24 text-center">
         <HugeiconsIcon icon={ShoppingCart01Icon} strokeWidth={1.5} className="size-10 text-muted-foreground" />
         <h1 className="font-heading mt-4 text-xl font-semibold">Your cart is empty</h1>
-        <p className="mt-1 text-xs text-muted-foreground">Add a few things and they&apos;ll show up here.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Add a few things and they&apos;ll show up here.</p>
         <Link href="/products" className={cn(buttonVariants({ variant: 'default' }), 'mt-6')}>
           Browse products
         </Link>
@@ -34,7 +36,7 @@ export default function CartPage() {
           <button
             type="button"
             onClick={clear}
-            className="text-xs text-muted-foreground transition-colors hover:text-destructive"
+            className="text-sm text-muted-foreground transition-colors hover:text-destructive"
           >
             Clear cart
           </button>
@@ -74,7 +76,7 @@ export default function CartPage() {
                     <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} className="size-4" />
                   </button>
                 </div>
-                <p className="text-xs text-muted-foreground">{formatPrice(item.price, item.currency)} each</p>
+                <p className="text-sm text-muted-foreground">{formatPrice(item.price, item.currency)} each</p>
                 <div className="mt-auto flex items-center justify-between">
                   <QuantityStepper
                     value={item.qty}
@@ -92,7 +94,7 @@ export default function CartPage() {
 
         <aside className="h-fit border border-border bg-card p-5 ring-1 ring-foreground/5 lg:sticky lg:top-20">
           <h2 className="font-heading text-sm font-semibold">Order summary</h2>
-          <dl className="mt-4 flex flex-col gap-2 text-xs">
+          <dl className="mt-4 flex flex-col gap-2 text-sm">
             <div className="flex justify-between">
               <dt className="text-muted-foreground">Subtotal ({count} item{count === 1 ? '' : 's'})</dt>
               <dd>{formatPrice(subtotal, currency)}</dd>
@@ -103,7 +105,7 @@ export default function CartPage() {
             </div>
           </dl>
           <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
-            <span className="text-xs font-medium">Total</span>
+            <span className="text-sm font-medium">Total</span>
             <span className="font-heading text-lg font-semibold">{formatPrice(subtotal, currency)}</span>
           </div>
           <Link href="/checkout" className={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'mt-5 w-full')}>
@@ -111,7 +113,7 @@ export default function CartPage() {
           </Link>
           <Link
             href="/products"
-            className="mt-3 block text-center text-xs text-muted-foreground transition-colors hover:text-foreground"
+            className="mt-3 block text-center text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             Continue shopping
           </Link>

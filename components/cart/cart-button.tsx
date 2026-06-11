@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Image01Icon, ShoppingCart01Icon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { buttonVariants } from '@/components/ui/button'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { useCart } from '@/lib/cart'

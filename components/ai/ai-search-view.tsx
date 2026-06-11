@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { AiSearch02Icon, Alert01Icon, InboxIcon, SparklesIcon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { AiResultCard } from '@/components/ai/ai-result-card'
 import { IntentChips } from '@/components/ai/intent-chips'
 import { HeroSearch } from '@/components/landing/hero-search'
@@ -96,7 +98,7 @@ export function AiSearchView() {
               <IntentChips intent={meta.intent} />
 
               {meta.degraded ? (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   AI explanations are paused — showing keyword results.
                 </p>
               ) : (
@@ -130,7 +132,7 @@ function EmptyState() {
     <div className="mt-16 flex flex-col items-center text-center">
       <HugeiconsIcon icon={SparklesIcon} strokeWidth={1.5} className="size-9 text-muted-foreground" />
       <p className="font-heading mt-3 text-base font-medium">Ask Shopy in plain English</p>
-      <p className="mt-1 text-xs text-muted-foreground">
+      <p className="mt-1 text-sm text-muted-foreground">
         Describe what you&apos;re after — budget, use case, vibe.
       </p>
       <div className="mt-5 flex flex-wrap justify-center gap-1.5">
@@ -138,7 +140,7 @@ function EmptyState() {
           <Link
             key={example}
             href={`/search?q=${encodeURIComponent(example)}`}
-            className="border border-border bg-background px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+            className="border border-border bg-background px-2.5 py-1 text-sm text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
           >
             {example}
           </Link>
@@ -150,7 +152,7 @@ function EmptyState() {
 
 function LoadingBlock() {
   return (
-    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+    <div className="flex items-center gap-2 text-sm text-muted-foreground">
       <HugeiconsIcon
         icon={SparklesIcon}
         strokeWidth={2}
@@ -163,7 +165,7 @@ function LoadingBlock() {
 
 function ErrorBlock({ message }: { message: string }) {
   return (
-    <div className="flex items-start gap-3 border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs text-destructive">
+    <div className="flex items-start gap-3 border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
       <HugeiconsIcon icon={Alert01Icon} strokeWidth={2} className="mt-0.5 size-4 shrink-0" />
       <span>{message}</span>
     </div>
@@ -175,7 +177,7 @@ function EmptyMatches() {
     <div className="flex flex-col items-center gap-2 border border-dashed border-border py-16 text-center">
       <HugeiconsIcon icon={InboxIcon} strokeWidth={1.5} className="size-7 text-muted-foreground" />
       <p className="font-heading text-sm font-medium">No matches</p>
-      <p className="text-xs text-muted-foreground">Try rephrasing — fewer constraints often helps.</p>
+      <p className="text-sm text-muted-foreground">Try rephrasing — fewer constraints often helps.</p>
     </div>
   )
 }
@@ -187,7 +189,7 @@ function ExplanationPanel({ text, streaming }: { text: string; streaming: boolea
         <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-3.5 text-primary" />
         Why these
       </div>
-      <p className="text-xs/relaxed text-foreground whitespace-pre-line">
+      <p className="text-base/relaxed text-foreground whitespace-pre-line">
         {text}
         {streaming && (
           <span

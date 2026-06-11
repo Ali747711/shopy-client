@@ -1,77 +1,185 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
-import { BlurFade } from '@/components/ui/blur-fade'
-import { formatPrice } from '@/lib/format'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import type { Swiper as SwiperClass } from 'swiper'
+import { A11y, FreeMode } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/free-mode'
 
-interface ShowcaseProduct {
-  name: string
-  category: string
-  price: number
-  slug: string
-  imageSrc: string
+import { Skeleton } from '@/components/ui/skeleton'
+import { getProducts } from '@/lib/products/api'
+import type { Product } from '@/lib/products/schema'
+import { cn } from '@/lib/utils'
+
+const PLACEHOLDER_IMAGE =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" fill="%23e5e5e5"%3E%3Crect width="800" height="1000"/%3E%3C/svg%3E'
+const CARD_COUNT = 12
+
+// Slides per view scale up with the viewport; fractional values let the next
+// card peek in so it reads as a swipeable carousel.
+const BREAKPOINTS = {
+  0: { slidesPerView: 2.2, spaceBetween: 12 },
+  640: { slidesPerView: 3.2, spaceBetween: 16 },
+  768: { slidesPerView: 4, spaceBetween: 16 },
+  1024: { slidesPerView: 5, spaceBetween: 16 },
 }
 
-const PRODUCTS: ShowcaseProduct[] = [
-  { name: 'Aurora Over-Ear Headphones', category: 'Audio', price: 248, slug: 'headphones', imageSrc: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Trailline Rain Shell', category: 'Outerwear', price: 178, slug: 'jacket', imageSrc: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Voyage 28L Backpack', category: 'Travel', price: 134, slug: 'backpack', imageSrc: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Apex Runner GT', category: 'Footwear', price: 156, slug: 'shoes', imageSrc: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Meridian Field Watch', category: 'Accessories', price: 320, slug: 'watch', imageSrc: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Halo Polarized Sunglasses', category: 'Accessories', price: 89, slug: 'sunglasses', imageSrc: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Frame One Mirrorless', category: 'Photography', price: 899, slug: 'camera', imageSrc: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Cloudstep Low', category: 'Footwear', price: 142, slug: 'shoes', imageSrc: 'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?auto=format&fit=crop&w=800&q=80' },
-]
+function ProductShowcaseSkeleton() {
+  return (
+    <div className="flex gap-3 sm:gap-4">
+      {Array.from({ length: 6 }, (_, i) => (
+        <Skeleton key={i} className="aspect-4/5 w-1/2 shrink-0 sm:w-1/3 md:w-1/4 lg:w-1/5" />
+      ))}
+    </div>
+  )
+}
 
 export function ProductShowcase() {
+  const { t } = useTranslation()
+  const [products, setProducts] = useState<Product[]>([])
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+
+  const [swiper, setSwiper] = useState<SwiperClass | null>(null)
+  const [edges, setEdges] = useState({ isBeginning: true, isEnd: false })
+  const syncEdges = (s: SwiperClass) =>
+    setEdges({ isBeginning: s.isBeginning, isEnd: s.isEnd })
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function fetchProducts() {
+      try {
+        const { data } = await getProducts({ limit: CARD_COUNT, sort: 'RATING' })
+        if (!cancelled) {
+          setProducts(data)
+          setStatus('ready')
+        }
+      } catch {
+        if (!cancelled) setStatus('error')
+      }
+    }
+
+    fetchProducts()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <section id="shop" className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-32">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="text-xs font-medium tracking-wider text-primary uppercase">Trending now</span>
-          <h2 className="font-heading mt-1 text-2xl font-bold tracking-tight sm:text-3xl">Picked for you</h2>
+          <span className="text-xs font-medium tracking-wider text-primary uppercase">
+            {t('landing.trendingNow')}
+          </span>
+          <h2 className="font-heading mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+            {t('landing.pickedForYou')}
+          </h2>
         </div>
-        <Link
-          href="/products"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-        >
-          View all
-          <ArrowUpRight className="size-4" />
-        </Link>
+
+        <div className="flex items-center gap-3">
+          {/* Carousel arrows — swipe on touch, click on desktop */}
+          <div className="hidden items-center gap-1.5 sm:flex">
+            <NavButton
+              label="Previous products"
+              disabled={edges.isBeginning}
+              onClick={() => swiper?.slidePrev()}
+            >
+              <ChevronLeft className="size-4" />
+            </NavButton>
+            <NavButton
+              label="Next products"
+              disabled={edges.isEnd}
+              onClick={() => swiper?.slideNext()}
+            >
+              <ChevronRight className="size-4" />
+            </NavButton>
+          </div>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {t('landing.viewAll')}
+            <ArrowUpRight className="size-4" />
+          </Link>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {PRODUCTS.map((product, index) => (
-          <BlurFade key={product.name} delay={0.04 * index} inView>
-            <Link href={`/products?category=${product.slug}`} className="group block focus-visible:outline-none">
-              <div className="relative aspect-4/5 overflow-hidden border border-border bg-muted">
-                <Image
-                  src={product.imageSrc}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                />
-                <span className="absolute top-2.5 left-2.5 bg-background/85 px-2 py-0.5 text-[11px] font-medium text-foreground backdrop-blur-sm">
-                  {product.category}
-                </span>
-                <span className="absolute right-2.5 bottom-2.5 flex size-8 items-center justify-center bg-primary text-primary-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <ArrowUpRight className="size-4" />
-                </span>
-              </div>
-              <div className="mt-2.5 flex items-start justify-between gap-2">
-                <h3 className="text-sm font-medium text-foreground transition-colors group-hover:text-primary">
-                  {product.name}
-                </h3>
-                <span className="font-heading text-sm font-semibold tabular-nums">
-                  {formatPrice(product.price, 'USD')}
-                </span>
-              </div>
-            </Link>
-          </BlurFade>
-        ))}
-      </div>
+      {status === 'loading' && <ProductShowcaseSkeleton />}
+
+      {status === 'ready' && (
+        <Swiper
+          modules={[FreeMode, A11y]}
+          freeMode={{ enabled: true, momentumBounce: false }}
+          grabCursor
+          breakpoints={BREAKPOINTS}
+          onSwiper={(s) => {
+            setSwiper(s)
+            syncEdges(s)
+          }}
+          onSlideChange={syncEdges}
+          onProgress={syncEdges}
+        >
+          {products.map((product) => {
+            const imageUrl = product.productImages?.[0]?.url || PLACEHOLDER_IMAGE
+            const imageAlt = product.productImages?.[0]?.alt || product.productName
+
+            return (
+              <SwiperSlide key={product._id}>
+                <Link
+                  href={`/products/${product._id}`}
+                  aria-label={product.productName}
+                  className="group block focus-visible:outline-none"
+                >
+                  <div className="relative aspect-4/5 overflow-hidden border border-border bg-muted">
+                    <Image
+                      src={imageUrl}
+                      alt={imageAlt}
+                      fill
+                      sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 25vw, 20vw"
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+                  </div>
+                </Link>
+              </SwiperSlide>
+            )
+          })}
+        </Swiper>
+      )}
     </section>
+  )
+}
+
+function NavButton({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  disabled?: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+      className={cn(
+        'grid size-8 place-items-center rounded-full border border-border text-foreground transition-colors',
+        'hover:border-foreground/40 hover:bg-muted',
+        'disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent',
+      )}
+    >
+      {children}
+    </button>
   )
 }

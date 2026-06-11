@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import { cn } from '@/lib/utils'
 
 interface QuantityStepperProps {

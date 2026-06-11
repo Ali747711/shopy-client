@@ -2,6 +2,8 @@
 
 import { useCallback, useState } from 'react'
 
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { isApiError } from '@/lib/api'
@@ -64,7 +66,7 @@ export function ReviewForm({ productId, onSubmitted, onCancel }: ReviewFormProps
 
       {/* Rating selector */}
       <div className="mt-4">
-        <label className="mb-1.5 block text-xs text-muted-foreground">Rating</label>
+        <label className="mb-1.5 block text-sm text-muted-foreground">Rating</label>
         <InteractiveRatingSquares value={rating} onChange={setRating} />
         {errors.rating && (
           <p className="mt-1 text-xs text-destructive">{errors.rating}</p>
@@ -73,7 +75,7 @@ export function ReviewForm({ productId, onSubmitted, onCancel }: ReviewFormProps
 
       {/* Comment */}
       <div className="mt-4">
-        <label htmlFor="review-comment" className="mb-1.5 block text-xs text-muted-foreground">
+        <label htmlFor="review-comment" className="mb-1.5 block text-sm text-muted-foreground">
           Your review
         </label>
         <Textarea

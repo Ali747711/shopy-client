@@ -239,3 +239,59 @@
     animation: none;
   }
 }
+
+/* ────────────────────────────────────────────────────────────
+   Page transitions — fade + 8px upward drift on enter,
+   fade + 4px downward drift on exit.
+   ──────────────────────────────────────────────────────────── */
+@keyframes shopy-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shopy-page-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+::view-transition-new(.page-enter) {
+  animation: 280ms ease-out both shopy-page-enter;
+}
+
+::view-transition-old(.page-exit) {
+  animation: 160ms ease-in both shopy-page-exit;
+}
+
+/* Respect prefers-reduced-motion — remove positional movement, keep instant swap */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   Currency selector dropdown — matches the existing glass aesthetic
+   ──────────────────────────────────────────────────────────── */
+.currency-popover {
+  background-color: color-mix(in oklab, var(--background) 90%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+  border-radius: 0;
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.18);
+}

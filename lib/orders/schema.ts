@@ -18,10 +18,22 @@ export const orderItemSchema = z.object({
   priceAtPurchase: z.number(),
 })
 
+export const orderShippingAddressSchema = z.object({
+  fullName: z.string(),
+  phone: z.string(),
+  address1: z.string(),
+  address2: z.string().optional(),
+  city: z.string(),
+  state: z.string(),
+  postalCode: z.string(),
+  country: z.string(),
+})
+
 export const orderSchema = z.object({
   _id: z.string(),
   userId: z.string().optional(),
   orderItems: z.array(orderItemSchema),
+  shippingAddress: orderShippingAddressSchema.optional(),
   orderTotal: z.number(),
   orderCurrency: z.string(),
   orderStatus: z.enum(ORDER_STATUSES),

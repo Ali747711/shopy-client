@@ -2,8 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Info, Search, ShoppingBag, ShoppingCart, User, type LucideIcon } from 'lucide-react'
+import { Heart, Home, Info, Search, ShoppingBag, ShoppingCart, User, type LucideIcon } from 'lucide-react'
 
+import { useTranslation } from 'react-i18next'
+
+import { SettingsMenu } from '@/components/settings-menu'
 import { useCart } from '@/lib/cart'
 import { cn } from '@/lib/utils'
 
@@ -14,18 +17,6 @@ interface DockItem {
   badgeKey?: 'cart'
 }
 
-const PRIMARY_ITEMS: DockItem[] = [
-  { icon: Home, label: 'Home', href: '/' },
-  { icon: ShoppingBag, label: 'Shop', href: '/products' },
-  { icon: Search, label: 'AI Search', href: '/search' },
-  { icon: Info, label: 'About', href: '/about' },
-]
-
-const SECONDARY_ITEMS: DockItem[] = [
-  { icon: ShoppingCart, label: 'Cart', href: '/cart', badgeKey: 'cart' },
-  { icon: User, label: 'Account', href: '/account' },
-]
-
 function isActive(pathname: string, href: string) {
   if (href === '/') return pathname === '/'
   return pathname === href || pathname.startsWith(`${href}/`)
@@ -34,10 +25,30 @@ function isActive(pathname: string, href: string) {
 export function DockNav() {
   const pathname = usePathname()
   const { count, hydrated } = useCart()
+  const { t } = useTranslation()
 
-  const renderItem = (item: DockItem) => {
+  // Primary / secondary split drives the desktop dock (with a divider between
+  // the two groups). On mobile they're concatenated into one bottom tab bar.
+  const PRIMARY_ITEMS: DockItem[] = [
+    { icon: Home, label: t('nav.home'), href: '/' },
+    { icon: ShoppingBag, label: t('nav.shop'), href: '/products' },
+    { icon: Search, label: t('nav.aiSearch'), href: '/search' },
+    { icon: Info, label: t('nav.about'), href: '/about' },
+  ]
+
+  const SECONDARY_ITEMS: DockItem[] = [
+    { icon: Heart, label: t('nav.wishlist'), href: '/wishlist' },
+    { icon: ShoppingCart, label: t('nav.cart'), href: '/cart', badgeKey: 'cart' },
+    { icon: User, label: t('nav.account'), href: '/account' },
+  ]
+
+  const ALL_ITEMS = [...PRIMARY_ITEMS, ...SECONDARY_ITEMS]
+  const cartBadge = hydrated && count > 0 ? count : undefined
+
+  /** Desktop dock tile — icon in a rounded glass tile with a hover tooltip. */
+  const renderTile = (item: DockItem) => {
     const active = isActive(pathname, item.href)
-    const badge = item.badgeKey === 'cart' && hydrated && count > 0 ? count : undefined
+    const badge = item.badgeKey === 'cart' ? cartBadge : undefined
 
     return (
       <Link
@@ -75,16 +86,74 @@ export function DockNav() {
     )
   }
 
+  /** Mobile bottom-tab item — icon + persistent label, evenly spaced. */
+  const renderTab = (item: DockItem) => {
+    const active = isActive(pathname, item.href)
+    const badge = item.badgeKey === 'cart' ? cartBadge : undefined
+
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        aria-label={item.label}
+        aria-current={active ? 'page' : undefined}
+        className="group flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5"
+      >
+        <span
+          className={cn(
+            'relative grid size-8 place-items-center rounded-lg transition-colors',
+            active ? 'bg-primary/15 text-primary' : 'text-white/65 group-active:text-white',
+          )}
+        >
+          <item.icon strokeWidth={2.1} className="size-5" />
+          {badge !== undefined && (
+            <span className="absolute -top-1.5 -right-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-semibold text-primary-foreground ring-1 ring-neutral-900">
+              {badge > 99 ? '99+' : badge}
+            </span>
+          )}
+        </span>
+        <span
+          className={cn(
+            'max-w-full truncate text-[9px] leading-none tracking-wide',
+            active ? 'text-primary' : 'text-white/55',
+          )}
+        >
+          {item.label}
+        </span>
+      </Link>
+    )
+  }
+
   return (
-    <nav
-      aria-label="Primary"
-      className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4"
-    >
-      <div className="pointer-events-auto flex scale-90 items-center gap-3 rounded-[28px] bg-neutral-900/80 px-3 py-2 shadow-2xl ring-1 ring-white/10 backdrop-blur-lg sm:scale-100 sm:gap-4 sm:rounded-[40px] sm:px-5 sm:py-3">
-        {PRIMARY_ITEMS.map(renderItem)}
-        <span className="mx-1 h-7 w-px bg-white/10" aria-hidden />
-        {SECONDARY_ITEMS.map(renderItem)}
+    <>
+      {/* Desktop / tablet: floating top dock with everything */}
+      <nav
+        aria-label="Primary"
+        className="pointer-events-none fixed inset-x-0 top-4 z-50 hidden justify-center px-4 sm:flex"
+      >
+        <div className="pointer-events-auto flex items-center gap-3 rounded-[40px] bg-neutral-900/80 px-5 py-3 shadow-2xl ring-1 ring-white/10 backdrop-blur-lg sm:gap-4">
+          {PRIMARY_ITEMS.map(renderTile)}
+          <span className="mx-1 h-7 w-px bg-white/10" aria-hidden />
+          {SECONDARY_ITEMS.map(renderTile)}
+        </div>
+      </nav>
+
+      {/* Language + currency settings — top-right corner on all screens */}
+      <div className="pointer-events-none fixed right-4 top-4 z-50 flex justify-end">
+        <SettingsMenu className="pointer-events-auto size-10 rounded-full bg-neutral-900/80 shadow-lg backdrop-blur-lg" />
       </div>
-    </nav>
+
+      {/* Mobile: bottom tab bar with the full nav */}
+      <nav
+        aria-label="Primary"
+        className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-neutral-900/90 backdrop-blur-lg sm:hidden"
+      >
+        <div className="flex h-14 items-stretch justify-around gap-0.5 px-1.5">
+          {ALL_ITEMS.map(renderTab)}
+        </div>
+        {/* iOS safe-area inset so the bar clears the home indicator */}
+        <div style={{ height: 'env(safe-area-inset-bottom)' }} aria-hidden />
+      </nav>
+    </>
   )
 }

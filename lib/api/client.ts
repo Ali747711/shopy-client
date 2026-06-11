@@ -1,9 +1,14 @@
 import type { ZodType } from 'zod'
 
-import { env } from '@/lib/env'
-
 import { ApiError } from './error'
 import type { ApiEnvelope, ApiResult } from './types'
+
+// Server-side (RSC, build) → call the backend directly via BACKEND_URL.
+// Client-side (browser) → use relative URLs, proxied by Next.js rewrites.
+const getBaseUrl = (): string =>
+  typeof window === 'undefined'
+    ? process.env.BACKEND_URL || 'http://localhost:4000'
+    : ''
 
 type QueryValue =
   | string
@@ -52,8 +57,8 @@ const buildQuery = (query?: Record<string, QueryValue>): string => {
 
 /**
  * Calls the Shopy backend, unwraps the `{ success, data, error, meta }`
- * envelope, and throws {@link ApiError} on any failure. Paths are joined to
- * `NEXT_PUBLIC_API_BASE_URL`, so pass the full route (e.g. `/api/products`).
+ * envelope, and throws {@link ApiError} on any failure. Paths are relative
+ * (e.g. `/api/products`) — Next.js rewrites proxy them to the backend.
  */
 export async function apiFetch<T>(
   path: string,
@@ -72,7 +77,7 @@ export async function apiFetch<T>(
     headers: extraHeaders,
   } = options
 
-  const url = `${env.NEXT_PUBLIC_API_BASE_URL}${path}${buildQuery(query)}`
+  const url = `${getBaseUrl()}${path}${buildQuery(query)}`
 
   const hasBody = body !== undefined && body !== null
   const headers: Record<string, string> = { Accept: 'application/json', ...extraHeaders }

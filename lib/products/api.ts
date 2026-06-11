@@ -41,9 +41,22 @@ export async function getProduct(id: string, currency?: string): Promise<Product
   return data.product
 }
 
+export async function getSimilarProducts(
+  productId: string,
+  limit = 6,
+): Promise<Product[]> {
+  const { data } = await api.get<{ items: Product[] }>(
+    `/api/recommendations/similar/${encodeURIComponent(productId)}`,
+    { query: { limit } },
+  )
+  return data.items
+}
+
 // No dedicated categories/facets endpoint exists yet, so derive the option list
 // from the catalog. Fine at the current catalog size; revisit if it grows.
 export async function getCategories(): Promise<string[]> {
+  // Backend caps limit at 100. 560 products across ~7 categories means
+  // all categories appear in the first page.
   const { data } = await getProducts({ limit: 100 })
   return Array.from(new Set(data.map((product) => product.productCategory))).sort()
 }

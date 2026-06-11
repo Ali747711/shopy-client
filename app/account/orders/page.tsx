@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Alert01Icon, PackageIcon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { OrderCard } from '@/components/account/order-card'
 import { buttonVariants } from '@/components/ui/button'
 import { isApiError } from '@/lib/api'

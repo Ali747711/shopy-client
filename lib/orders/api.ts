@@ -1,4 +1,5 @@
 import { api } from '@/lib/api'
+import type { AddressFields } from '@/lib/addresses'
 
 import {
   orderListSchema,
@@ -13,6 +14,7 @@ export interface CreateOrderInput {
   items: { productId: string; qty: number }[]
   currency?: string
   paymentMethod?: PaymentMethod
+  shippingAddress: AddressFields
 }
 
 export async function createOrder(input: CreateOrderInput): Promise<Order> {
@@ -37,4 +39,13 @@ export async function getMyOrders(): Promise<Order[]> {
     schema: orderListSchema,
   })
   return data
+}
+
+export async function cancelOrder(id: string): Promise<Order> {
+  const { data } = await api.patch(
+    `/api/orders/${encodeURIComponent(id)}/status`,
+    { orderStatus: 'CANCELLED' },
+    { ...withCredentials, schema: orderResponseSchema },
+  )
+  return data.order
 }

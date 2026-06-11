@@ -78,7 +78,7 @@ export function ReviewItem({ review, productId, isOwn, onDeleted }: ReviewItemPr
             {initials}
           </div>
           <div>
-            <p className="text-xs font-medium">{userName}</p>
+            <p className="text-sm font-medium">{userName}</p>
             <p className="text-[10px] text-muted-foreground">{formatRelativeDate(review.createdAt)}</p>
           </div>
         </div>
@@ -98,7 +98,7 @@ export function ReviewItem({ review, productId, isOwn, onDeleted }: ReviewItemPr
         </div>
       </div>
 
-      <p className="mt-2 text-xs/relaxed text-muted-foreground">{review.comment}</p>
+      <p className="mt-2 text-sm/relaxed text-muted-foreground">{review.comment}</p>
 
       {/* Inline delete confirmation */}
       {confirmingDelete && (

@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import { BlurFade } from '@/components/ui/blur-fade'
 import { Button } from '@/components/ui/button'
 import {
@@ -50,7 +52,7 @@ export function ReviewList({
     <div>
       {/* Sort control */}
       <div className="mb-4 flex items-center justify-between">
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'} shown
         </p>
         <Select value={sort} onValueChange={(v) => onSortChange(v as ReviewSort)}>

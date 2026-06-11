@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslation } from 'react-i18next'
+
 import type { Review } from '@/lib/reviews'
 
 interface ReviewSummaryProps {
@@ -32,7 +34,7 @@ export function ReviewSummary({ reviews, total }: ReviewSummaryProps) {
         <p className="font-heading text-6xl font-semibold tracking-tight sm:text-7xl">
           {avg.toFixed(1)}
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           {total} {total === 1 ? 'review' : 'reviews'}
         </p>
       </div>
@@ -43,7 +45,7 @@ export function ReviewSummary({ reviews, total }: ReviewSummaryProps) {
           const count = distribution[star - 1]
           const pct = (count / maxBucket) * 100
           return (
-            <div key={star} className="flex items-center gap-2 text-xs">
+            <div key={star} className="flex items-center gap-2 text-sm">
               <span className="w-3 text-right text-muted-foreground">{star}</span>
               <div className="relative h-2 flex-1 bg-muted">
                 <div

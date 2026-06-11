@@ -16,12 +16,23 @@ export function AiResultCard({ product }: { product: ScoredProduct }) {
       className="group/link block focus-visible:outline-none"
     >
       <Card className="h-full transition-all group-hover/link:ring-foreground/25 group-focus-visible/link:ring-2 group-focus-visible/link:ring-ring">
-        <div className="relative -mt-4 flex aspect-square w-full items-center justify-center bg-gradient-to-br from-muted to-secondary">
-          <HugeiconsIcon
-            icon={Image01Icon}
-            strokeWidth={1.5}
-            className="size-8 text-muted-foreground/40"
-          />
+        <div className="relative -mt-4 aspect-square w-full overflow-hidden bg-muted">
+          {product.productImages?.[0] ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={product.productImages[0].url}
+              alt={product.productImages[0].alt ?? product.productName}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover/link:scale-105"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted to-secondary">
+              <HugeiconsIcon
+                icon={Image01Icon}
+                strokeWidth={1.5}
+                className="size-8 text-muted-foreground/40"
+              />
+            </div>
+          )}
           {product.score > 0 && (
             <span className="absolute top-2 right-2 inline-flex items-center gap-1 bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
               <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-3" />

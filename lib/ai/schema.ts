@@ -10,6 +10,11 @@ export const searchIntentSchema = z.object({
 })
 export type SearchIntent = z.infer<typeof searchIntentSchema>
 
+const scoredProductImageSchema = z.object({
+  url: z.string(),
+  alt: z.string().optional(),
+})
+
 // The AI search endpoint returns a slimmer product than the catalog list.
 export const scoredProductSchema = z.object({
   _id: z.string(),
@@ -19,6 +24,7 @@ export const scoredProductSchema = z.object({
   productPrice: z.number(),
   productCurrency: z.string(),
   productTags: z.array(z.string()).default([]),
+  productImages: z.array(scoredProductImageSchema).default([]),
   score: z.number(),
 })
 export type ScoredProduct = z.infer<typeof scoredProductSchema>

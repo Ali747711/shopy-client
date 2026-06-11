@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ShoppingCart01Icon, Tick02Icon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { QuantityStepper } from '@/components/cart/quantity-stepper'
 import { Button } from '@/components/ui/button'
 import { useCart, type CartAddInput } from '@/lib/cart'

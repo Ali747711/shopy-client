@@ -5,6 +5,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Cancel01Icon, Search01Icon } from '@hugeicons/core-free-icons'
 
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -27,9 +29,7 @@ const SORT_LABELS: Record<ProductSort, string> = {
 const ALL_CATEGORIES = 'all'
 const SEARCH_DEBOUNCE_MS = 400
 
-const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1)
-
-export function ProductFilters({ categories }: { categories: string[] }) {
+export function ProductFilters({ categories }: { categories: { value: string; label: string }[] }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -107,8 +107,8 @@ export function ProductFilters({ categories }: { categories: string[] }) {
           <SelectGroup>
             <SelectItem value={ALL_CATEGORIES}>All categories</SelectItem>
             {categories.map((option) => (
-              <SelectItem key={option} value={option}>
-                {capitalize(option)}
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
               </SelectItem>
             ))}
           </SelectGroup>
@@ -132,13 +132,15 @@ export function ProductFilters({ categories }: { categories: string[] }) {
 
       <div className="flex items-center gap-1">
         <PriceInput
+          key={`min-${minPrice}`}
           ariaLabel="Minimum price"
           placeholder="Min"
           defaultValue={minPrice}
           onCommit={commitPrice('minPrice')}
         />
-        <span className="text-xs text-muted-foreground">–</span>
+        <span className="text-sm text-muted-foreground">–</span>
         <PriceInput
+          key={`max-${maxPrice}`}
           ariaLabel="Maximum price"
           placeholder="Max"
           defaultValue={maxPrice}
