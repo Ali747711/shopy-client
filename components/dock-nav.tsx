@@ -27,6 +27,9 @@ export function DockNav() {
   const { count, hydrated } = useCart()
   const { t } = useTranslation()
 
+  // The admin area has its own sidebar shell — hide the storefront dock there.
+  if (pathname.startsWith('/admin')) return null
+
   // Primary / secondary split drives the desktop dock (with a divider between
   // the two groups). On mobile they're concatenated into one bottom tab bar.
   const PRIMARY_ITEMS: DockItem[] = [

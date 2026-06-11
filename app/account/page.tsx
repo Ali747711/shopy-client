@@ -3,9 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { PackageIcon } from '@hugeicons/core-free-icons'
-
-import { useTranslation } from 'react-i18next'
+import { DashboardSquare01Icon, PackageIcon } from '@hugeicons/core-free-icons'
 
 import { OrderCard } from '@/components/account/order-card'
 import { buttonVariants } from '@/components/ui/button'
@@ -35,11 +33,22 @@ export default function AccountOverviewPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <header>
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          Hi, {user?.userName.split(' ')[0]}
-        </h1>
-        <p className="mt-1 text-xs text-muted-foreground">Manage your orders and account.</p>
+      <header className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="font-heading text-2xl font-semibold tracking-tight">
+            Hi, {user?.userName.split(' ')[0]}
+          </h1>
+          <p className="mt-1 text-xs text-muted-foreground">Manage your orders and account.</p>
+        </div>
+        {user?.userRole === 'ADMIN' && (
+          <Link
+            href="/admin"
+            className={cn(buttonVariants({ size: 'sm' }), 'shrink-0')}
+          >
+            <HugeiconsIcon icon={DashboardSquare01Icon} data-icon="inline-start" />
+            Admin Dashboard
+          </Link>
+        )}
       </header>
 
       <section className="grid gap-3 sm:grid-cols-3">
